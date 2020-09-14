@@ -1,1 +1,14 @@
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/
+    username: root
+    password: root
 
+mybatis:
+  type-aliases-package: com.nubiform.dao
+  mapper-locations: classpath:/query/*.xml
+
+data:
+  path: /Users/nubiform/app/data
+  t-path: /Users/nubiform/app/t-data
