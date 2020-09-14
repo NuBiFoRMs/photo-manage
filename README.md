@@ -1,2 +1,2 @@
-# photo-manage
+# PhotoManage
 Photo Manage

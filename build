@@ -1,0 +1,3 @@
+./mvnw clean
+./mvnw package
+docker build -t photo-app .
