@@ -10,5 +10,5 @@ mybatis:
   mapper-locations: classpath:/query/*.xml
 
 data:
-  path: /Users/nubiform/app/data
-  t-path: /Users/nubiform/app/t-data
+  path: /Users/nubiform/docker/volumes/photo-manage/image
+  thumb-path: /Users/nubiform/docker/volumes/photo-manage/thumb-image

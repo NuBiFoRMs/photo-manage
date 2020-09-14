@@ -33,7 +33,7 @@ public class ImageService {
 	@Value("${data.path}")
 	private String dataPath;
 	
-	@Value("${data.t-path}")
+	@Value("${data.thumb-path}")
 	private String thumbDataPath;
 	
 	public ArrayList<String> getDirectorys() {
