@@ -1,3 +1,2 @@
-./mvnw clean
-./mvnw package
+./mvnw clean package
 docker build -t photo-manage .
