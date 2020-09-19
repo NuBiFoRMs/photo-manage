@@ -1,4 +1,4 @@
-package com.nubifom.common;
+package com.nubiform.common;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;

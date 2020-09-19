@@ -24,7 +24,7 @@ import com.drew.metadata.Directory;
 import com.drew.metadata.Metadata;
 import com.drew.metadata.Tag;
 import com.drew.metadata.exif.ExifSubIFDDirectory;
-import com.nubifom.common.CommonUtils;
+import com.nubiform.common.CommonUtils;
 
 @Service
 public class ImageService {
