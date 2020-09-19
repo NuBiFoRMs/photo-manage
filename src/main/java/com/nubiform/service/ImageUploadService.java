@@ -8,12 +8,12 @@ import java.util.UUID;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.util.FileCopyUtils;
 
-import com.drew.imaging.ImageMetadataReader;
-import com.drew.metadata.Metadata;
 import com.nubiform.common.CommonUtils;
+import com.nubiform.mongo.document.Images;
 
 @Service
 public class ImageUploadService {
@@ -25,9 +25,12 @@ public class ImageUploadService {
 	@Value("${data.thumb-path}")
 	private String thumbDataPath;
 	
+	private MongoTemplate mongoTemplate;
+	
 	private ImageService imageService;
 	
-	public ImageUploadService(ImageService imageService) {
+	public ImageUploadService(MongoTemplate mongoTemplate, ImageService imageService) {
+		this.mongoTemplate = mongoTemplate;
 		this.imageService = imageService;
 	}
 	
@@ -46,6 +49,11 @@ public class ImageUploadService {
 		catch (Exception e) {
 			logger.error(CommonUtils.getPrintStackTrace(e));
 		}
+		
+		Images images = new Images();
+		images.setFilename(uuidFileName);
+		images.setOriginfilename(fileName);
+		mongoTemplate.insert(images);
 		
 		return metadata;
 	}

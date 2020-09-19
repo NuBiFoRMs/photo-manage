@@ -2,7 +2,6 @@ spring:
   mvc:
     throw-exception-if-no-handler-found: true
     dispatch-options-request: false
-
   profiles:
     include:
     - datasource
@@ -10,6 +9,15 @@ spring:
     multipart:
       max-file-size: 50MB
       max-request-size: 50MB
+  data:
+    mongodb:
+      #uri: mongodb://[username]:[password]@[host]:[port]/[database]
+      #uri: mongodb://root:root@localhost:27017/photo-manage
+      host: localhost
+      port: 27017
+      database: photo-manage
+      username: photo-manage
+      password: password
 
 mybatis:
   type-aliases-package: com.nubiform.dao
@@ -19,10 +27,11 @@ data:
   path: /Users/nubiform/docker/volumes/photo-manage/image
   thumb-path: /Users/nubiform/docker/volumes/photo-manage/thumb-image
 
-#logging:
-#  level:
-#    com.nubiform: debug
+logging:
+  level:
+    com.nubiform: debug
 #    org.springframework: debug
+#    org.mongodb: debug
 
 springdoc.swagger-ui.path: /swagger-ui.html
 
