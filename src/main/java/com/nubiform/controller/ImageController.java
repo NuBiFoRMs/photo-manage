@@ -1,26 +1,38 @@
 package com.nubiform.controller;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
+import com.drew.imaging.ImageProcessingException;
+import com.nubiform.common.CommonUtils;
 import com.nubiform.service.ImageService;
+import com.nubiform.service.ImageUploadService;
 
 import io.swagger.v3.oas.annotations.Operation;
 
 @RestController
 @RequestMapping("/api")
 public class ImageController {
+	private final Logger logger = LoggerFactory.getLogger(this.getClass());
 	
 	private ImageService imageService;
 	
-	public ImageController(ImageService imageService) {
+	private ImageUploadService imageUploadService;
+	
+	public ImageController(ImageService imageService, ImageUploadService imageUploadService) {
 		this.imageService = imageService;
+		this.imageUploadService = imageUploadService;
 	}
 	
 	@GetMapping("/getDirectories")
@@ -42,19 +54,35 @@ public class ImageController {
 	
 	@GetMapping("/getMetadata")
 	@Operation(description = "get image metadata")
-	public HashMap<Object, HashMap<Object, Object>> getMetadata(@RequestParam(value = "id", required=true) String imageName) {
+	public HashMap<Object, HashMap<Object, Object>> getMetadata(@RequestParam(value = "id", required=true) String imageName) throws ImageProcessingException, IOException {
 		return imageService.getMetadata(imageName);
 	}
 	
 	@GetMapping("/getMetadataByKey")
 	@Operation(description = "get image metadata by key")
-	public HashMap<Object, Object> getMetadata(@RequestParam(value = "id", required=true) String imageName, @RequestParam("key") String key) {
+	public HashMap<Object, Object> getMetadata(@RequestParam(value = "id", required=true) String imageName, @RequestParam("key") String key) throws ImageProcessingException, IOException {
 		return imageService.getMetadata(imageName, key);
 	}
 	
 	@GetMapping("/getMetadataByKeys")
 	@Operation(description = "get image metadata by key1, key2")
-	public String getMetadata(@RequestParam(value = "id", required=true) String imageName, @RequestParam("key1") String key1, @RequestParam("key2") String key2) {
+	public String getMetadata(@RequestParam(value = "id", required=true) String imageName, @RequestParam("key1") String key1, @RequestParam("key2") String key2) throws ImageProcessingException, IOException {
 		return imageService.getMetadata(imageName, key1, key2);
+	}
+	
+	@PostMapping("uploadImage")
+	public HashMap<Object, HashMap<Object, Object>> uploadImage(@RequestParam(value="filename") MultipartFile imageFile) {
+		logger.info("{} {} {}", imageFile.getOriginalFilename(), imageFile.getContentType(), imageFile.getSize());
+		
+		HashMap<Object, HashMap<Object, Object>> result = null;
+		
+		try {
+			result = imageUploadService.uploadImage(imageFile.getOriginalFilename(), imageFile.getBytes());
+		}
+		catch (Exception e) {
+			logger.error(CommonUtils.getPrintStackTrace(e));
+		}
+		
+		return result;
 	}
 }
