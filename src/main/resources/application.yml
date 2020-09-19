@@ -1,9 +1,11 @@
 spring:
-  datasource:
-    driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/
-    username: root
-    password: root
+  mvc:
+    throw-exception-if-no-handler-found: true
+    dispatch-options-request: false
+
+  profiles:
+    include:
+    - datasource
 
 mybatis:
   type-aliases-package: com.nubiform.dao
@@ -12,3 +14,10 @@ mybatis:
 data:
   path: /Users/nubiform/docker/volumes/photo-manage/image
   thumb-path: /Users/nubiform/docker/volumes/photo-manage/thumb-image
+
+#logging:
+#  level:
+#    com.nubiform: debug
+#    org.springframework: debug
+
+springdoc.swagger-ui.path: /swagger-ui.html
