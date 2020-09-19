@@ -24,7 +24,7 @@ import com.drew.metadata.Directory;
 import com.drew.metadata.Metadata;
 import com.drew.metadata.Tag;
 import com.drew.metadata.exif.ExifSubIFDDirectory;
-import com.nubifom.common.CommonUtils;
+import com.nubiform.common.CommonUtils;
 
 @Service
 public class ImageService {
@@ -123,44 +123,45 @@ public class ImageService {
 		}
 	}
 	
-	public HashMap<Object, HashMap<Object, Object>> getMetadata(String imageName) {
+	public HashMap<Object, HashMap<Object, Object>> getMetadata(String imageName) throws ImageProcessingException, IOException {
 		String filePath = dataPath + "/" + imageName;
 		logger.info("filePath: {}", filePath);
 		
+		return getMetadata(ImageMetadataReader.readMetadata(new File(filePath)));
+	}
+	
+	public HashMap<Object, HashMap<Object, Object>> getMetadata(InputStream imageInputStream) throws ImageProcessingException, IOException {
+		return getMetadata(ImageMetadataReader.readMetadata(imageInputStream));
+	}
+	
+	public HashMap<Object, HashMap<Object, Object>> getMetadata(Metadata metadata) {
 		// return variable
 		HashMap<Object, HashMap<Object, Object>> result = new HashMap<Object, HashMap<Object, Object>>();
 		
-		try {
-			Metadata metadata = ImageMetadataReader.readMetadata(new File(filePath));
-			for (Directory directory : metadata.getDirectories()) {
-				if (directory.hasErrors()) {
-					for (String error : directory.getErrors()) {
-						logger.error("ERROR: {}", error);
-					}
-				}
-				else {
-					HashMap<Object, Object> tagMap = new HashMap<Object, Object>();
-					for (Tag tag : directory.getTags()) {
-						logger.info("[{}] : [{}] = {}", directory.getName(), tag.getTagName(), tag.getDescription());
-						tagMap.put(tag.getTagName(), tag.getDescription());
-					}
-					result.put(directory.getName(), tagMap);
+		for (Directory directory : metadata.getDirectories()) {
+			if (directory.hasErrors()) {
+				for (String error : directory.getErrors()) {
+					logger.error("ERROR: {}", error);
 				}
 			}
-		} catch (ImageProcessingException e) {
-			logger.error(CommonUtils.getPrintStackTrace(e));
-		} catch (IOException e) {
-			logger.error(CommonUtils.getPrintStackTrace(e));
+			else {
+				HashMap<Object, Object> tagMap = new HashMap<Object, Object>();
+				for (Tag tag : directory.getTags()) {
+					logger.info("[{}] : [{}] = {}", directory.getName(), tag.getTagName(), tag.getDescription());
+					tagMap.put(tag.getTagName(), tag.getDescription());
+				}
+				result.put(directory.getName(), tagMap);
+			}
 		}
 		
 		return result;
 	}
 	
-	public HashMap<Object, Object> getMetadata(String imageName, String key) {
+	public HashMap<Object, Object> getMetadata(String imageName, String key) throws ImageProcessingException, IOException {
 		return getMetadata(imageName).get(key);
 	}
 	
-	public String getMetadata(String imageName, String key1, String key2) {
+	public String getMetadata(String imageName, String key1, String key2) throws ImageProcessingException, IOException {
 		return (String)getMetadata(imageName).get(key1).get(key2);
 	}
 	
