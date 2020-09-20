@@ -23,7 +23,7 @@ import com.nubiform.service.ImageUploadService;
 import io.swagger.v3.oas.annotations.Operation;
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/image")
 public class ImageController {
 	private final Logger logger = LoggerFactory.getLogger(this.getClass());
 	
