@@ -37,10 +37,10 @@ public class ImageUploadService {
 		String ext = FilenameUtils.getExtension(fileName);
 		File uuidFile = null;
 		if (!"".equals(ext) && ext != null) {
-			uuidFile = FileUtils.getFile(dataPath, uuid + "");
+			uuidFile = FileUtils.getFile(dataPath, uuid + "." + ext);
 		}
 		else {
-			uuidFile = FileUtils.getFile(dataPath, uuid + "." + ext);
+			uuidFile = FileUtils.getFile(dataPath, uuid + "");
 		}
 		logger.info(uuidFile.getPath());
 		
