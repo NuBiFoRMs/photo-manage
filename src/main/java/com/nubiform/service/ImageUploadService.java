@@ -1,19 +1,19 @@
 package com.nubiform.service;
 
-import java.io.ByteArrayInputStream;
 import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.HashMap;
 import java.util.UUID;
 
+import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.FilenameUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.stereotype.Service;
-import org.springframework.util.FileCopyUtils;
 
-import com.nubiform.common.CommonUtils;
 import com.nubiform.mongo.document.Images;
 
 @Service
@@ -26,37 +26,34 @@ public class ImageUploadService {
 	@Value("${data.thumb-path}")
 	private String thumbDataPath;
 	
-	@Autowired
 	private MongoTemplate mongoTemplate;
-	
-	private ImageService imageService;
 	
 	public ImageUploadService(MongoTemplate mongoTemplate, ImageService imageService) {
 		this.mongoTemplate = mongoTemplate;
-		this.imageService = imageService;
 	}
 	
-	public HashMap<Object, HashMap<Object, Object>> uploadImage(String fileName, byte[] imageData) {
+	public File uploadImage(String fileName, InputStream imageInputStream) throws IOException {
 		UUID uuid = UUID.randomUUID();
-		String ext = fileName.substring(fileName.lastIndexOf(".") + 1);
-		String uuidFileName = dataPath + "/" + uuid + "." + ext;
-		logger.info(uuidFileName);
-		
-		HashMap<Object, HashMap<Object, Object>> metadata = new HashMap<Object, HashMap<Object, Object>>();
-		
-		try {
-			FileCopyUtils.copy(imageData, new File(uuidFileName));
-			metadata = imageService.getMetadata(new ByteArrayInputStream(imageData));
+		String ext = FilenameUtils.getExtension(fileName);
+		File uuidFile = null;
+		if (!"".equals(ext) && ext != null) {
+			uuidFile = FileUtils.getFile(dataPath, uuid + "");
 		}
-		catch (Exception e) {
-			logger.error(CommonUtils.getPrintStackTrace(e));
+		else {
+			uuidFile = FileUtils.getFile(dataPath, uuid + "." + ext);
 		}
+		logger.info(uuidFile.getPath());
 		
+		FileUtils.copyToFile(imageInputStream, uuidFile);
+		
+		return uuidFile;
+	}
+	
+	public void insertImages(String filename, String originFileName, HashMap<Object, HashMap<Object, Object>> metadata) {
 		Images images = new Images();
-		images.setFilename(uuidFileName);
-		images.setOriginfilename(fileName);
+		images.setFilename(filename);
+		images.setOriginfilename(originFileName);
+		images.setMetadata(metadata);
 		mongoTemplate.insert(images);
-		
-		return metadata;
 	}
 }

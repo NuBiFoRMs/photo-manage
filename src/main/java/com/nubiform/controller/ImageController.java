@@ -1,5 +1,6 @@
 package com.nubiform.controller;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -70,19 +71,21 @@ public class ImageController {
 		return imageService.getMetadata(imageName, key1, key2);
 	}
 	
-	@PostMapping("uploadImage")
+	@PostMapping("/uploadImage")
 	public HashMap<Object, HashMap<Object, Object>> uploadImage(@RequestParam(value="filename") MultipartFile imageFile) {
 		logger.info("{} {} {}", imageFile.getOriginalFilename(), imageFile.getContentType(), imageFile.getSize());
 		
-		HashMap<Object, HashMap<Object, Object>> result = null;
+		HashMap<Object, HashMap<Object, Object>> metadata = null;
 		
 		try {
-			result = imageUploadService.uploadImage(imageFile.getOriginalFilename(), imageFile.getBytes());
+			File uploadFile = imageUploadService.uploadImage(imageFile.getOriginalFilename(), imageFile.getInputStream());
+			metadata = imageService.getMetadata(imageFile.getInputStream());
+			imageUploadService.insertImages(uploadFile.getName(), imageFile.getOriginalFilename(), metadata);
 		}
 		catch (Exception e) {
 			logger.error(CommonUtils.getPrintStackTrace(e));
 		}
 		
-		return result;
+		return metadata;
 	}
 }
