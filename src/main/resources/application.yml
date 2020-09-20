@@ -12,7 +12,6 @@ spring:
   data:
     mongodb:
       #uri: mongodb://[username]:[password]@[host]:[port]/[database]
-      #uri: mongodb://root:root@localhost:27017/photo-manage
       host: localhost
       port: 27017
       database: photo-manage
@@ -22,10 +21,6 @@ spring:
 mybatis:
   type-aliases-package: com.nubiform.dao
   mapper-locations: classpath:/query/*.xml
-
-data:
-  path: /Users/nubiform/docker/volumes/photo-manage/image
-  thumb-path: /Users/nubiform/docker/volumes/photo-manage/thumb-image
 
 logging:
   level:
@@ -40,3 +35,9 @@ management:
     web:
       exposure:
         include: "*"
+
+##### user-defined #####
+
+data:
+  path: /Users/nubiform/docker/volumes/photo-manage/image
+  thumb-path: /Users/nubiform/docker/volumes/photo-manage/thumb-image

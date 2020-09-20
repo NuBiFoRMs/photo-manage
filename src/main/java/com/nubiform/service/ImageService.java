@@ -12,6 +12,8 @@ import java.util.HashMap;
 
 import javax.imageio.ImageIO;
 
+import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -71,7 +73,7 @@ public class ImageService {
 				result.add(file.getPath());
 				
 				//printMetaData(file);
-				printExifSubIF(file);
+				//printExifSubIF(file);
 			}
 			else if (file.isDirectory()) {
 				logger.info("d " + file.getPath());
@@ -80,54 +82,9 @@ public class ImageService {
 		}
 	}
 	
-	private void printMetaData(File imageFile) {
-		try {
-			Metadata metadata = ImageMetadataReader.readMetadata(imageFile);
-			
-			for (Directory directory : metadata.getDirectories()) {
-				for (Tag tag : directory.getTags()) {
-					logger.info("[{}] - {} = {}", directory.getName(), tag.getTagName(), tag.getDescription());
-				}
-				if (directory.hasErrors()) {
-					for (String error : directory.getErrors()) {
-						logger.error("ERROR: {}", error);
-					}
-				}
-			}
-		} catch (ImageProcessingException e) {
-			logger.error(CommonUtils.getPrintStackTrace(e));
-		} catch (IOException e) {
-			logger.error(CommonUtils.getPrintStackTrace(e));
-		}
-	}
-	
-	private void printExifSubIF(File imageFile) {
-		try {
-			Metadata metadata = ImageMetadataReader.readMetadata(imageFile);
-			
-			ExifSubIFDDirectory directory = metadata.getFirstDirectoryOfType(ExifSubIFDDirectory.class);
-			if (directory != null) {
-				for (Tag tag : directory.getTags()) {
-					logger.info("[{}] - {} = {}", directory.getName(), tag.getTagName(), tag.getDescription());
-				}
-				if (directory.hasErrors()) {
-					for (String error : directory.getErrors()) {
-						logger.error("ERROR: {}", error);
-					}
-				}
-			}
-		} catch (ImageProcessingException e) {
-			logger.error(CommonUtils.getPrintStackTrace(e));
-		} catch (IOException e) {
-			logger.error(CommonUtils.getPrintStackTrace(e));
-		}
-	}
-	
 	public HashMap<Object, HashMap<Object, Object>> getMetadata(String imageName) throws ImageProcessingException, IOException {
-		String filePath = dataPath + "/" + imageName;
-		logger.info("filePath: {}", filePath);
-		
-		return getMetadata(ImageMetadataReader.readMetadata(new File(filePath)));
+		logger.info("filePath: {}", FileUtils.getFile(dataPath, imageName).getPath());
+		return getMetadata(ImageMetadataReader.readMetadata(FileUtils.getFile(dataPath, imageName)));
 	}
 	
 	public HashMap<Object, HashMap<Object, Object>> getMetadata(InputStream imageInputStream) throws ImageProcessingException, IOException {
@@ -147,7 +104,7 @@ public class ImageService {
 			else {
 				HashMap<Object, Object> tagMap = new HashMap<Object, Object>();
 				for (Tag tag : directory.getTags()) {
-					logger.info("[{}] : [{}] = {}", directory.getName(), tag.getTagName(), tag.getDescription());
+					logger.debug("[{}] : [{}] = {}", directory.getName(), tag.getTagName(), tag.getDescription());
 					tagMap.put(tag.getTagName(), tag.getDescription());
 				}
 				result.put(directory.getName(), tagMap);
@@ -166,14 +123,13 @@ public class ImageService {
 	}
 	
 	public byte[] getImage(String imageName) {
-		String filePath = dataPath + "/" + imageName;
-		logger.info("filePath: {}", filePath);
+		logger.info("filePath: {}", FileUtils.getFile(dataPath, imageName).getPath());
 		
 		// return variable
 		byte[] result = null;
 		
 		try {
-			BufferedImage bufferedImage = ImageIO.read(new File(filePath));
+			BufferedImage bufferedImage = ImageIO.read(FileUtils.getFile(dataPath, imageName));
 			ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
 			ImageIO.write(bufferedImage, "jpg", byteArrayOutputStream);
 			result = byteArrayOutputStream.toByteArray();
@@ -195,11 +151,11 @@ public class ImageService {
 	}
 	
 	public byte[] getImageThumb(String imageName) {
-		String filePath = dataPath + "/" + imageName;
-		String thumbFilePath = thumbDataPath + "/" + imageName;
-		String ext = imageName.substring(imageName.lastIndexOf(".") + 1);
-		logger.info("filePath: {}", filePath);
-		logger.info("thumbFilePath: {}, ext: {}", thumbFilePath, ext);
+		File imageFile = FileUtils.getFile(dataPath, imageName);
+		File thumbImageFile = FileUtils.getFile(thumbDataPath, imageName);
+		String ext = FilenameUtils.getExtension(imageName);
+		logger.info("filePath: {}", imageFile.getPath());
+		logger.info("thumbFilePath: {}, ext: {}", thumbImageFile.getPath(), ext);
 		
 		double baseWidth = 800;
 		
@@ -207,11 +163,9 @@ public class ImageService {
 		byte[] result = null;
 		
 		try {
-			File thumbFile = new File(thumbFilePath);
-			
-			if (!thumbFile.exists()) {
+			if (!thumbImageFile.exists()) {
 				logger.info("create new thumb image");
-				BufferedImage bufferedOImage = ImageIO.read(new File(filePath));
+				BufferedImage bufferedOImage = ImageIO.read(imageFile);
 				
 				int oWidth = bufferedOImage.getWidth();
 				int oHeight = bufferedOImage.getHeight();
@@ -228,10 +182,10 @@ public class ImageService {
 				graphic.drawImage(image, 0, 0, tWidth, tHeight, null);
 				graphic.dispose();
 				
-				ImageIO.write(bufferedTImage, ext, thumbFile);
+				ImageIO.write(bufferedTImage, ext, thumbImageFile);
 			}
 			
-			BufferedImage bufferedImage = ImageIO.read(thumbFile);
+			BufferedImage bufferedImage = ImageIO.read(thumbImageFile);
 			ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
 			ImageIO.write(bufferedImage, "jpg", byteArrayOutputStream);
 			result = byteArrayOutputStream.toByteArray();
@@ -241,8 +195,8 @@ public class ImageService {
 			
 			logger.info("display no image");
 			try {
-				InputStream in = getClass().getResourceAsStream("/static/images/no_image.png");
-				result = IOUtils.toByteArray(in);
+				InputStream inputStream = getClass().getResourceAsStream("/static/images/no_image.png");
+				result = IOUtils.toByteArray(inputStream);
 			}
 			catch (Exception e1) {
 				logger.error(CommonUtils.getPrintStackTrace(e1));
