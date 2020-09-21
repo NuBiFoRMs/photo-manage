@@ -3,6 +3,7 @@ package com.nubiform.service;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.UUID;
 
@@ -49,11 +50,13 @@ public class ImageUploadService {
 		return uuidFile;
 	}
 	
-	public void insertImages(String filename, String originFileName, HashMap<Object, HashMap<Object, Object>> metadata) {
+	public void insertImages(String filename, String originFileName, HashMap<Object, HashMap<Object, Object>> metadata, long shoottime, long uploadtime) {
 		Images images = new Images();
 		images.setFilename(filename);
 		images.setOriginfilename(originFileName);
 		images.setMetadata(metadata);
+		images.setShoottime(shoottime);
+		images.setUploadtime(uploadtime);
 		mongoTemplate.insert(images);
 	}
 }

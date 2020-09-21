@@ -15,5 +15,6 @@ public class Images {
 	private String filename;
 	private String originfilename;
 	private HashMap<Object, HashMap<Object, Object>> metadata;
-	
+	private long shoottime;
+	private long uploadtime;
 }
