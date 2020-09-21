@@ -47,7 +47,7 @@ public class ImageService {
 	
 	private MongoTemplate mongoTemplate;
 	
-	public ImageService(MongoTemplate mongoTemplate, ImageService imageService) {
+	public ImageService(MongoTemplate mongoTemplate) {
 		this.mongoTemplate = mongoTemplate;
 	}
 	
