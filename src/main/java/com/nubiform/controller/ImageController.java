@@ -7,8 +7,6 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -24,11 +22,12 @@ import com.nubiform.service.ImageService;
 import com.nubiform.service.ImageUploadService;
 
 import io.swagger.v3.oas.annotations.Operation;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @RestController
 @RequestMapping("/api/image")
 public class ImageController {
-	private final Logger logger = LoggerFactory.getLogger(this.getClass());
 	
 	private ImageService imageService;
 	
