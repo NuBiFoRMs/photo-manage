@@ -3,11 +3,9 @@ package com.nubiform.common;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 
 public class CommonUtils {
-	private final static Logger logger = LoggerFactory.getLogger(CommonUtils.class);
 	
 	public static String getPrintStackTrace(Exception e) {
 		StringWriter errors = new StringWriter();
