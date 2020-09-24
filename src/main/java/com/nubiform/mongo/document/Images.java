@@ -5,9 +5,11 @@ import java.util.HashMap;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import lombok.Builder;
 import lombok.Data;
 
 @Data
+@Builder
 @Document(collection = "images")
 public class Images {
 	@Id
