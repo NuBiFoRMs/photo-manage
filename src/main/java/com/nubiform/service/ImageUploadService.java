@@ -50,12 +50,14 @@ public class ImageUploadService {
 	}
 	
 	public void insertImages(String filename, String originFileName, HashMap<Object, HashMap<Object, Object>> metadata, long shoottime, long uploadtime) {
-		Images images = new Images();
-		images.setFilename(filename);
-		images.setOriginfilename(originFileName);
-		images.setMetadata(metadata);
-		images.setShoottime(shoottime);
-		images.setUploadtime(uploadtime);
+		Images images = Images.builder()
+		.filename(filename)
+		.originfilename(originFileName)
+		.metadata(metadata)
+		.shoottime(shoottime)
+		.uploadtime(uploadtime)
+		.build();
+		
 		mongoTemplate.insert(images);
 	}
 }

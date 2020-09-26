@@ -24,9 +24,9 @@ mybatis:
 
 logging:
   level:
-    com.nubiform: debug
-#    org.springframework: debug
-#    org.mongodb: debug
+    com.nubiform: info
+    org.springframework: info
+    org.mongodb: info
 
 springdoc.swagger-ui.path: /swagger-ui.html
 
