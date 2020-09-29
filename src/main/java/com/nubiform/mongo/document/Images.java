@@ -12,6 +12,7 @@ import lombok.Data;
 @Builder
 @Document(collection = "images")
 public class Images {
+	
 	@Id
 	private String id;
 	private String filename;
@@ -19,4 +20,5 @@ public class Images {
 	private HashMap<Object, HashMap<Object, Object>> metadata;
 	private long shoottime;
 	private long uploadtime;
+	
 }
