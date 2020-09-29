@@ -60,4 +60,5 @@ public class ImageUploadService {
 		
 		mongoTemplate.insert(images);
 	}
+	
 }

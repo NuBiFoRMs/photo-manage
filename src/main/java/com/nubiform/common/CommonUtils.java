@@ -3,8 +3,6 @@ package com.nubiform.common;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 
-import lombok.extern.slf4j.Slf4j;
-
 public class CommonUtils {
 	
 	public static String getPrintStackTrace(Exception e) {
@@ -13,4 +11,5 @@ public class CommonUtils {
 		
 		return errors.toString();
 	}
+	
 }
