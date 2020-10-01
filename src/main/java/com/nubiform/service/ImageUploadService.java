@@ -14,8 +14,10 @@ import org.springframework.stereotype.Service;
 
 import com.nubiform.mongo.document.Images;
 
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
+@RequiredArgsConstructor
 @Slf4j
 @Service
 public class ImageUploadService {
@@ -26,11 +28,7 @@ public class ImageUploadService {
 	@Value("${data.thumb-path}")
 	private String thumbDataPath;
 	
-	private MongoTemplate mongoTemplate;
-	
-	public ImageUploadService(MongoTemplate mongoTemplate, ImageService imageService) {
-		this.mongoTemplate = mongoTemplate;
-	}
+	private final MongoTemplate mongoTemplate;
 	
 	public File uploadImage(String fileName, InputStream imageInputStream) throws IOException {
 		UUID uuid = UUID.randomUUID();

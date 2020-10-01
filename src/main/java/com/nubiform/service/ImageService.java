@@ -33,8 +33,10 @@ import com.drew.metadata.exif.ExifSubIFDDirectory;
 import com.nubiform.common.CommonUtils;
 import com.nubiform.mongo.document.Images;
 
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
+@RequiredArgsConstructor
 @Slf4j
 @Service
 public class ImageService {
@@ -45,11 +47,7 @@ public class ImageService {
 	@Value("${data.thumb-path}")
 	private String thumbDataPath;
 	
-	private MongoTemplate mongoTemplate;
-	
-	public ImageService(MongoTemplate mongoTemplate) {
-		this.mongoTemplate = mongoTemplate;
-	}
+	private final MongoTemplate mongoTemplate;
 	
 	public List<Images> getImageList() {
 		Query query = new Query();
