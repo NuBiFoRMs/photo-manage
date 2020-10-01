@@ -1,4 +1,4 @@
-package com.nubiform.common;
+package com.nubiform.photo.common;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;

@@ -1,4 +1,4 @@
-package com.nubiform.application;
+package com.nubiform.photo;
 
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;

@@ -8,7 +8,7 @@
 		<version>2.3.3.RELEASE</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
-	<groupId>com.nubiform</groupId>
+	<groupId>com.nubiform.photo</groupId>
 	<artifactId>PhotoManage</artifactId>
 	<version>0.0.1</version>
 	<name>PhotoManage</name>
