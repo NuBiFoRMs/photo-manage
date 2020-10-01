@@ -1,4 +1,4 @@
-package com.nubiform.service;
+package com.nubiform.photo.service;
 
 import java.io.File;
 import java.io.IOException;
@@ -12,7 +12,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.stereotype.Service;
 
-import com.nubiform.mongo.document.Images;
+import com.nubiform.photo.mongo.document.Images;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

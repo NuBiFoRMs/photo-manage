@@ -1,4 +1,4 @@
-package com.nubiform.controller;
+package com.nubiform.photo.controller;
 
 import java.io.File;
 import java.io.IOException;
@@ -16,10 +16,10 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.drew.imaging.ImageProcessingException;
-import com.nubiform.common.CommonUtils;
-import com.nubiform.mongo.document.Images;
-import com.nubiform.service.ImageService;
-import com.nubiform.service.ImageUploadService;
+import com.nubiform.photo.common.CommonUtils;
+import com.nubiform.photo.mongo.document.Images;
+import com.nubiform.photo.service.ImageService;
+import com.nubiform.photo.service.ImageUploadService;
 
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
