@@ -1,4 +1,4 @@
-package com.nubiform.service;
+package com.nubiform.photo.service;
 
 import java.awt.Graphics2D;
 import java.awt.Image;
@@ -30,11 +30,13 @@ import com.drew.metadata.Metadata;
 import com.drew.metadata.Tag;
 import com.drew.metadata.exif.ExifDirectoryBase;
 import com.drew.metadata.exif.ExifSubIFDDirectory;
-import com.nubiform.common.CommonUtils;
-import com.nubiform.mongo.document.Images;
+import com.nubiform.photo.common.CommonUtils;
+import com.nubiform.photo.mongo.document.Images;
 
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
+@RequiredArgsConstructor
 @Slf4j
 @Service
 public class ImageService {
@@ -45,11 +47,7 @@ public class ImageService {
 	@Value("${data.thumb-path}")
 	private String thumbDataPath;
 	
-	private MongoTemplate mongoTemplate;
-	
-	public ImageService(MongoTemplate mongoTemplate) {
-		this.mongoTemplate = mongoTemplate;
-	}
+	private final MongoTemplate mongoTemplate;
 	
 	public List<Images> getImageList() {
 		Query query = new Query();

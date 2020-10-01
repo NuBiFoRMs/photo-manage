@@ -1,4 +1,4 @@
-package com.nubiform.mongo.document;
+package com.nubiform.photo.mongo.document;
 
 import java.util.HashMap;
 
