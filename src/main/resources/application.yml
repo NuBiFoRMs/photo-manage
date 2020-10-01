@@ -2,9 +2,6 @@ spring:
   mvc:
     throw-exception-if-no-handler-found: true
     dispatch-options-request: false
-  profiles:
-    include:
-    - datasource
   servlet:
     multipart:
       max-file-size: 50MB
@@ -17,10 +14,6 @@ spring:
       database: photo-manage
       username: photo-manage
       password: password
-
-mybatis:
-  type-aliases-package: com.nubiform.dao
-  mapper-locations: classpath:/query/*.xml
 
 logging:
   level:
