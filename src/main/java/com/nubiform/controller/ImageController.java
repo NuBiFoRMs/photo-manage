@@ -22,21 +22,18 @@ import com.nubiform.service.ImageService;
 import com.nubiform.service.ImageUploadService;
 
 import io.swagger.v3.oas.annotations.Operation;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
+@RequiredArgsConstructor
 @Slf4j
 @RestController
 @RequestMapping("/api/image")
 public class ImageController {
 	
-	private ImageService imageService;
+	private final ImageService imageService;
 	
-	private ImageUploadService imageUploadService;
-	
-	public ImageController(ImageService imageService, ImageUploadService imageUploadService) {
-		this.imageService = imageService;
-		this.imageUploadService = imageUploadService;
-	}
+	private final ImageUploadService imageUploadService;
 	
 	@GetMapping("/getImageList")
 	public List<Images> getImageList() {
